@@ -15,7 +15,7 @@ class AssetDatasourceImpl implements AssetDatasource {
 
   AssetDatasourceImpl({required this.client});
 
-  static void isolateFunction(SendPort sendPort) {
+  static void getData(SendPort sendPort) {
     final port = ReceivePort();
     sendPort.send(port.sendPort);
 
@@ -26,9 +26,9 @@ class AssetDatasourceImpl implements AssetDatasource {
     });
   }
 
-  static Future<String> runInIsolate(String data) async {
+  static Future<String> runIsolate(String data) async {
     final receivePort = ReceivePort();
-    await Isolate.spawn(isolateFunction, receivePort.sendPort);
+    await Isolate.spawn(getData, receivePort.sendPort);
 
     final sendPort = await receivePort.first as SendPort;
     final resultPort = ReceivePort();
@@ -43,7 +43,7 @@ class AssetDatasourceImpl implements AssetDatasource {
     final response = await client.get('/$kCompanies/$companyId/$kAssets');
 
     if (response.statusCode == 200) {
-      final result = await runInIsolate(jsonEncode(response.data));
+      final result = await runIsolate(jsonEncode(response.data));
       return result;
     } else {
       throw GetAssetsFailure();
