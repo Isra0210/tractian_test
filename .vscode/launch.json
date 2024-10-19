@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "SIMULATOR debug ",
+            "request": "launch",
+            "program": "./lib/main.dart",
+            "type": "dart",
+            "flutterMode": "debug",
+            "args": [
+                "--dart-define=LOG_LEVEL=fine"
+            ]
+        },
+    ]
+}
