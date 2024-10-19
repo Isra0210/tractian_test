@@ -3,5 +3,5 @@
     "critical": "Critical",
     "searchBy": "Search Asset or Location",
     "noCompaniesToShow": "There are no companies to show",
-    "noDataToShow": "There are no dataw to show"
+    "noAssetsToShow": "There are no Assets to show"
 }

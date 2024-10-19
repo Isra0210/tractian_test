@@ -4,8 +4,11 @@ import 'package:get/get.dart';
 import 'package:tractian/features/assets/presentation/pages/asset_page.dart';
 import 'package:tractian/features/company/presentation/controllers/home_controller.dart';
 import 'package:tractian/features/company/presentation/widgets/company_card.dart';
+import 'package:tractian/utils/constants/constants.dart';
 import 'package:tractian/utils/icons/app_icons.dart';
 import 'package:tractian/utils/navigator/app_navigator.dart';
+
+import '../../../../utils/widgets/loading_widget.dart';
 
 class HomePage extends GetView<HomeController> {
   const HomePage({super.key});
@@ -17,7 +20,6 @@ class HomePage extends GetView<HomeController> {
     final str = AppLocalizations.of(context)!;
     final textStyle = Theme.of(context).textTheme.bodyMedium;
 
-    const loading = Center(child: CircularProgressIndicator());
     final appBar = AppBar(title: Image.asset(AppIcons.logo, width: 126));
     final errorMessage = Center(
       child: Padding(
@@ -32,7 +34,7 @@ class HomePage extends GetView<HomeController> {
     return Scaffold(
       appBar: appBar,
       body: Obx(() {
-        if (controller.isLoading) return loading;
+        if (controller.isLoading) return const LoadingWidget();
         if (controller.errorMessage.isNotEmpty) return errorMessage;
         if (controller.companies.isEmpty) return emptyCompaniesMessage;
 
@@ -43,10 +45,8 @@ class HomePage extends GetView<HomeController> {
             return CompanyCard(
               name: company.name,
               onTap: () {
-                AppNavigator.of(context).toNamed(
-                  AssetPage.route,
-                  arguments: company.id,
-                );
+                AppNavigator.of(context).toNamed(AssetPage.route,
+                    arguments: company.id, parameters: {kId: company.id});
               },
             );
           },

@@ -6,7 +6,7 @@ class StatusErrorWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CircleAvatar(
-      radius: 8,
+      radius: 6,
       backgroundColor: Theme.of(context).colorScheme.error,
     );
   }
