@@ -80,8 +80,8 @@ class AssetPage extends GetView<AssetController> {
           buildStatusIcon(node),
         ],
       );
-      if (node.nodes.isEmpty) ListTile(title: title);
-      
+      if (node.nodes.isEmpty) return ListTile(title: title);
+
       return CustomPaint(
         painter: CreateLine(),
         child: ExpansionTile(
