@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
-import 'package:tractian/features/assets/domain/entities/tree_node_entity.dart';
+import 'package:tractian/features/assets/domain/entities/node_entity.dart';
 import 'package:tractian/features/assets/presentation/controllers/assets_controller.dart';
 import 'package:tractian/utils/icons/app_icons.dart';
 
@@ -28,7 +28,13 @@ class SearchHeader extends GetView<AssetController> {
             children: [Image.asset(AppIcons.search, height: 14, width: 14)],
           ),
         ),
-        onChanged: (value) => controller.search = value,
+        onChanged: (value) {
+          controller.search = value;
+          controller.nodesFiltered = controller.searchNodesByNameAndStatus(
+            controller.nodes,
+            existingIds: {},
+          );
+        },
       ),
     );
     return Column(
@@ -49,8 +55,14 @@ class SearchHeader extends GetView<AssetController> {
                       onTap: () {
                         if (controller.filter == NodeStatus.operating) {
                           controller.filter = NodeStatus.none;
+                          controller.nodesFiltered = controller.nodes;
                         } else {
                           controller.filter = NodeStatus.operating;
+                          controller.nodesFiltered =
+                              controller.searchNodesByNameAndStatus(
+                            controller.nodes,
+                            existingIds: {},
+                          );
                         }
                       },
                     ),
@@ -62,8 +74,14 @@ class SearchHeader extends GetView<AssetController> {
                       onTap: () {
                         if (controller.filter == NodeStatus.alert) {
                           controller.filter = NodeStatus.none;
+                          controller.nodesFiltered = controller.nodes;
                         } else {
                           controller.filter = NodeStatus.alert;
+                          controller.nodesFiltered =
+                              controller.searchNodesByNameAndStatus(
+                            controller.nodes,
+                            existingIds: {},
+                          );
                         }
                       },
                     )

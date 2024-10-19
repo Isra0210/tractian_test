@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:logging/logging.dart';
-import 'package:tractian/features/assets/domain/entities/tree_node_entity.dart';
+import 'package:tractian/features/assets/domain/entities/node_entity.dart';
 
 import 'package:tractian/features/assets/domain/usecases/get_assets.dart';
 import 'package:tractian/features/location/data/model/location_model.dart';
@@ -35,9 +35,13 @@ class AssetController extends GetxController implements GetxService {
   String get errorMessage => _errorMessage.value;
   set errorMessage(String value) => _errorMessage.value = value;
 
-  final RxList<NodeEntity> _tree = <NodeEntity>[].obs;
-  List<NodeEntity> get tree => _tree;
-  set treeData(List<NodeEntity> value) => _tree.value = value;
+  final RxList<NodeEntity> _nodes = <NodeEntity>[].obs;
+  List<NodeEntity> get nodes => _nodes;
+  set nodes(List<NodeEntity> value) => _nodes.value = value;
+
+  late final RxList<NodeEntity> _nodesFiltered = <NodeEntity>[...nodes].obs;
+  List<NodeEntity> get nodesFiltered => _nodesFiltered;
+  set nodesFiltered(List<NodeEntity> value) => _nodesFiltered.value = value;
 
   List<AssetModel> assets = [];
 
@@ -54,8 +58,35 @@ class AssetController extends GetxController implements GetxService {
         _ => NodeStatus.none,
       };
 
-  bool nodeContainsName(NodeEntity node, String name) {
-    return node.name.toLowerCase().contains(name.toLowerCase());
+  List<NodeEntity> searchNodesByNameAndStatus(
+    List<NodeEntity> nodes, {
+    required Set<String> existingIds,
+  }) {
+    List<NodeEntity> result = [];
+
+    for (var node in nodes) {
+      bool shouldAddNode = false;
+
+      if (node.name.toLowerCase().contains(search.toLowerCase())) {
+        if (filter == NodeStatus.none || node.status == filter) {
+          shouldAddNode = true;
+        }
+      }
+
+      List<NodeEntity> childResults = searchNodesByNameAndStatus(
+        node.nodes,
+        existingIds: existingIds,
+      );
+
+      if (childResults.isNotEmpty || shouldAddNode) {
+        if (!existingIds.contains(node.id) && !result.contains(node)) {
+          result.add(node);
+          existingIds.add(node.id);
+        }
+      }
+    }
+
+    return result;
   }
 
   List<NodeEntity> buildTree(
@@ -197,7 +228,7 @@ class AssetController extends GetxController implements GetxService {
         (json) => LocationModel.fromMap(json),
       ),
     );
-    _tree.value = buildTree(location.locations, assets);
+    _nodes.value = buildTree(location.locations, assets);
     isLoading = false;
     update();
   }

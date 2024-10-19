@@ -7,7 +7,7 @@ import 'package:tractian/features/assets/presentation/controllers/assets_control
 import 'package:tractian/features/assets/presentation/widgets/search_header.dart';
 import 'package:tractian/utils/icons/app_icons.dart';
 import 'package:tractian/utils/theme/app_colors.dart';
-import '../../domain/entities/tree_node_entity.dart';
+import '../../domain/entities/node_entity.dart';
 
 class AssetPage extends GetView<AssetController> {
   const AssetPage({super.key});
@@ -46,8 +46,9 @@ class AssetPage extends GetView<AssetController> {
     );
 
     Widget buildIcon(NodeEntity node) {
-      if (node.type == NodeType.location || node.type == NodeType.subLocation)
+      if (node.type == NodeType.location || node.type == NodeType.subLocation) {
         return locationIcon;
+      }
       if (node.type == NodeType.location) return locationIcon;
       if (node.type == NodeType.component && node.nodes.isEmpty) {
         return cubeSmallIcon;
@@ -79,9 +80,8 @@ class AssetPage extends GetView<AssetController> {
           buildStatusIcon(node),
         ],
       );
-      if (node.nodes.isEmpty) {
-        return ListTile(title: title);
-      }
+      if (node.nodes.isEmpty) ListTile(title: title);
+      
       return CustomPaint(
         painter: CreateLine(),
         child: ExpansionTile(
@@ -122,23 +122,14 @@ class AssetPage extends GetView<AssetController> {
                       if (controller.errorMessage.isNotEmpty) {
                         return errorMessage;
                       }
-                      if (controller.tree.isEmpty) {
+                      if (controller.nodesFiltered.isEmpty) {
                         return emptyAssetsMessage;
                       }
-                      // if (controller.search.isNotEmpty) {
-                      //   controller.findNodesByName(
-                      //     controller.tree,
-                      //     controller.search,
-                      //   );
-                      // }
-                      //else {
-                      //   controller.refreshFilteringList();
-                      // }
                       return ListView.builder(
                         shrinkWrap: true,
-                        itemCount: controller.tree.length,
+                        itemCount: controller.nodesFiltered.length,
                         itemBuilder: (context, index) {
-                          return buildTreeNode(controller.tree[index]);
+                          return buildTreeNode(controller.nodesFiltered[index]);
                         },
                       );
                     },
