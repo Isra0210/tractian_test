@@ -4,11 +4,12 @@
   <source src="app_emulation.mp4" type="video/mp4">
 </video>
 
-## Ponto de melhorias
+[https://drive.google.com/file/d/1OHutkpPkZZHwaQuMQfUZyN-S-C_bSgJU/view?usp=sharing](If the video above doesn't load)
 
-- Cobertura de testes automatizados, principalmente unitário e de integração.
-- Utilização do SQLite como banco de dados local.
-- Um sistema mais robusto de captura e tratamento de erros.
-- Centralização e gerenciamento das isolates.
-- Cobertura total do cache, para melhorar o tempo de resposta e reduzir a dependência de chamadas à API.
-- Monitoramento e análise de desempenho e error no app, implementar ferramentas de monitoramento como Firebase Performance ou Sentry e o crashlytics.
+## Points for improvement
+- Coverage of automated tests, especially unit and integration tests.
+- Use of SQLite as the local database.
+- A more robust error capture and handling system.
+- Centralization and management of isolates.
+- Full cache coverage, to improve response times and reduce dependency on API calls.
+- Performance and error monitoring and analysis in the app, implementing monitoring tools such as Firebase Performance or Sentry and crashlytics.
