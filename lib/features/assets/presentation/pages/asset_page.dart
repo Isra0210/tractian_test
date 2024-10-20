@@ -5,8 +5,12 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:tractian/features/assets/presentation/controllers/assets_controller.dart';
 import 'package:tractian/features/assets/presentation/widgets/search_header.dart';
+import 'package:tractian/utils/constants/constants.dart';
 import 'package:tractian/utils/icons/app_icons.dart';
 import 'package:tractian/utils/theme/app_colors.dart';
+import 'package:tractian/utils/widgets/feedback_message_widget.dart';
+import 'package:tractian/utils/widgets/loading_widget.dart';
+import 'package:tractian/utils/widgets/status_error_widget.dart';
 import '../../domain/entities/node_entity.dart';
 
 class AssetPage extends GetView<AssetController> {
@@ -18,32 +22,26 @@ class AssetPage extends GetView<AssetController> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final str = AppLocalizations.of(context)!;
-    final companyId = Get.arguments;
-
+    final companyId = Get.parameters[kId];
     const spacing = SizedBox(width: 8);
-    const loading = Center(child: CircularProgressIndicator());
-    final errorMessage = Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Text(controller.errorMessage, style: theme.textTheme.bodyMedium),
-      ),
+    final chevronDown = Image.asset(
+      AppIcons.chevronDown,
+      height: 24,
+      width: 24,
     );
-    final emptyAssetsMessage = Center(
-      child: Text(str.noDataToShow, style: theme.textTheme.bodyMedium),
-    );
-
-    final chevronDown =
-        Image.asset(AppIcons.chevronDown, height: 24, width: 24);
     final locationIcon = Image.asset(AppIcons.location, height: 22, width: 22);
-    final cubeSmallIcon =
-        Image.asset(AppIcons.cubeSmall, height: 22, width: 22);
-    final cube = Image.asset(AppIcons.cube, height: 22, width: 22);
-    final operatingSensorComponent =
-        Image.asset(AppIcons.boltFilled, height: 12, width: 9);
-    final alertStatusComponent = CircleAvatar(
-      radius: 6,
-      backgroundColor: theme.colorScheme.error,
+    final cubeSmallIcon = Image.asset(
+      AppIcons.cubeSmall,
+      height: 22,
+      width: 22,
     );
+    final cube = Image.asset(AppIcons.cube, height: 22, width: 22);
+    final operatingSensorComponent = Image.asset(
+      AppIcons.boltFilled,
+      height: 12,
+      width: 9,
+    );
+    const alertStatusComponent = StatusErrorWidget();
 
     Widget buildIcon(NodeEntity node) {
       if (node.type == NodeType.location || node.type == NodeType.subLocation) {
@@ -80,6 +78,7 @@ class AssetPage extends GetView<AssetController> {
           buildStatusIcon(node),
         ],
       );
+
       if (node.nodes.isEmpty) return ListTile(title: title);
 
       return CustomPaint(
@@ -95,9 +94,9 @@ class AssetPage extends GetView<AssetController> {
           initiallyExpanded: true,
           children: node.nodes
               .map(
-                (n) => Padding(
+                (child) => Padding(
                   padding: const EdgeInsets.only(left: 36.0),
-                  child: buildTreeNode(n),
+                  child: buildTreeNode(child),
                 ),
               )
               .toList(),
@@ -114,16 +113,16 @@ class AssetPage extends GetView<AssetController> {
             child: Padding(
               padding: EdgeInsets.only(bottom: Platform.isIOS ? 20 : 16),
               child: FutureBuilder(
-                future: controller.fetchAssets(companyId),
+                future: controller.fetchAssets(companyId!),
                 builder: (context, snapshot) {
                   return Obx(
                     () {
-                      if (controller.isLoading) return loading;
+                      if (controller.isLoading) return const LoadingWidget();
                       if (controller.errorMessage.isNotEmpty) {
-                        return errorMessage;
+                        return FeedbackMessageWidget(controller.errorMessage);
                       }
                       if (controller.nodesFiltered.isEmpty) {
-                        return emptyAssetsMessage;
+                        return FeedbackMessageWidget(str.noAssetsToShow);
                       }
                       return ListView.builder(
                         shrinkWrap: true,

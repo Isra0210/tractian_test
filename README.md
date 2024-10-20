@@ -1,16 +1,14 @@
-# tractian
+# Tractian
 
-A new Flutter project.
+<video width="600" height="400" controls>
+  <source src="app_emulation.mp4" type="video/mp4">
+</video>
 
-## Getting Started
+## Ponto de melhorias
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Cobertura de testes automatizados, principalmente unitário e de integração.
+- Utilização do SQLite como banco de dados local.
+- Um sistema mais robusto de captura e tratamento de erros.
+- Centralização e gerenciamento das isolates.
+- Cobertura total do cache, para melhorar o tempo de resposta e reduzir a dependência de chamadas à API.
+- Monitoramento e análise de desempenho e error no app, implementar ferramentas de monitoramento como Firebase Performance ou Sentry e o crashlytics.

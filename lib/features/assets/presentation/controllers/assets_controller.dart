@@ -63,21 +63,17 @@ class AssetController extends GetxController implements GetxService {
     required Set<String> existingIds,
   }) {
     List<NodeEntity> result = [];
-
     for (var node in nodes) {
       bool shouldAddNode = false;
-
       if (node.name.toLowerCase().contains(search.toLowerCase())) {
         if (filter == NodeStatus.none || node.status == filter) {
           shouldAddNode = true;
         }
       }
-
       List<NodeEntity> childResults = searchNodesByNameAndStatus(
         node.nodes,
         existingIds: existingIds,
       );
-
       if (childResults.isNotEmpty || shouldAddNode) {
         if (!existingIds.contains(node.id) && !result.contains(node)) {
           result.add(node);
@@ -94,7 +90,6 @@ class AssetController extends GetxController implements GetxService {
     List<AssetModel> assets,
   ) {
     List<NodeEntity> items = [];
-
     // Create nodes for all locations that don't have a parentId
     for (var location in locations) {
       if (location.parentId == null) {
@@ -108,7 +103,6 @@ class AssetController extends GetxController implements GetxService {
         );
       }
     }
-
     // Add sub-locations to your parent locations
     for (var location in locations) {
       final parentLocation =
@@ -124,7 +118,6 @@ class AssetController extends GetxController implements GetxService {
         );
       }
     }
-
     //Add assets and components to the tree
     for (var asset in assets) {
       final node = NodeEntity(
@@ -197,8 +190,12 @@ class AssetController extends GetxController implements GetxService {
         parent.nodes.add(node);
       } else {
         for (var child in parent.nodes) {
-          addNodeRecursively(child, node,
-              locationId: locationId, parentId: parentId);
+          addNodeRecursively(
+            child,
+            node,
+            locationId: locationId,
+            parentId: parentId,
+          );
         }
       }
     }
@@ -229,6 +226,7 @@ class AssetController extends GetxController implements GetxService {
       ),
     );
     _nodes.value = buildTree(location.locations, assets);
+    _nodesFiltered.value = buildTree(location.locations, assets);
     isLoading = false;
     update();
   }

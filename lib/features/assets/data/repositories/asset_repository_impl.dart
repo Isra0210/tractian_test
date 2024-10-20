@@ -19,15 +19,7 @@ class AssetRepositoryImpl implements AssetRepository {
   @override
   Future<Either<Failure, String>> getAssets(String companyId) async {
     try {
-      // final assetsFromCache = localDatasource.getAssets();
-
       final assets = await datasource.getAssets(companyId);
-
-      //   if (assetsFromCache.isEmpty) {
-      //     // await localDatasource.saveAssets(assets);
-      //     // return Right(assets);
-      //   }
-      //   log.info('Get ${assets.length} assets from api');
       return Right(assets);
     } on Failure {
       log.severe('Error when get Assets');
