@@ -4,7 +4,7 @@
   <source src="app_emulation.mp4" type="video/mp4">
 </video>
 
-[https://drive.google.com/file/d/1OHutkpPkZZHwaQuMQfUZyN-S-C_bSgJU/view?usp=sharing](If the video above doesn't load)
+[If the video above doesn't load](https://drive.google.com/file/d/1OHutkpPkZZHwaQuMQfUZyN-S-C_bSgJU/view?usp=sharing)
 
 ## Points for improvement
 - Coverage of automated tests, especially unit and integration tests.
